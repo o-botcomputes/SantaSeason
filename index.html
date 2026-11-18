@@ -106,9 +106,12 @@ const SERVICES={"Netflix":/^netflix/i,"Prime Video":/^amazon prime video/i,"Disn
 const MOODS={"Funny":35,"Family":10751,"Romantic":10749,"Action":28,"Spooky":27,"Animated":16};
 const GENRES={28:"Action",35:"Comedy",10751:"Family",10749:"Romance",27:"Horror",16:"Animation",18:"Drama",14:"Fantasy",12:"Adventure",10402:"Music"};
 const $=id=>document.getElementById(id);
+// Optional: paste your TMDB key between the quotes to skip the setup screen.
+const BUILT_IN_KEY="";
 let KEY="",kwId=207317,provIds={},selSvc=new Set(),selMood=new Set(),seen=new Set(),hidden=new Set(),autoHide=false,busy=false;
 try{KEY=localStorage.getItem("tmdbKey")||"";JSON.parse(localStorage.getItem("xmasSvc")||"[]").forEach(x=>selSvc.add(x));JSON.parse(localStorage.getItem("xmasHidden")||"[]").forEach(x=>hidden.add(x));autoHide=localStorage.getItem("xmasAuto")==="1"}catch(e){}
 
+if(BUILT_IN_KEY)KEY=BUILT_IN_KEY;
 function api(path,params={}){
   const u=new URL(API+path),h={};
   if(KEY.startsWith("eyJ"))h.Authorization="Bearer "+KEY;else u.searchParams.set("api_key",KEY);
@@ -225,6 +228,7 @@ $("saveKey").onclick=()=>{
   $("setupMsg").textContent="";start();
 };
 $("resetKey").onclick=()=>{try{localStorage.removeItem("tmdbKey")}catch(e){}KEY="";$("app").hidden=true;$("setup").hidden=false;$("key").value=""};
+if(BUILT_IN_KEY)$("resetKey").hidden=true;
 KEY?start():($("setup").hidden=false);
 </script>
 </body>
